@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Pi-xel-art</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+    <style type="text/css">
+        html {
+            background-color: black;
+        }
+        body {
+            margin: 0;
+        }
+        canvas {
+            display: flex;
+            margin: auto;
+            padding-top: 100px;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+    var config = {
+        type: Phaser.AUTO,
+        width: 800,
+        height: 600,
+        backgroundColor: '#2d2d2d',
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 200 },
+                debug: false
+            }
+        },
+        scene: {
+            preload: preload,
+            create: create,
+            update: update
+        }
+    };
+
+    let recipe;
+    let recipeIng1;
+    let recipeIng2;
+    let recipeIng3;
+    let recipeIng4;
+    let cursors;
+
+    let game = new Phaser.Game(config);
+
+    function preload ()
+    {
+        this.load.image('cafe', 'assets/frames/cafe.jpg');
+        this.load.image('square', 'assets/frames/square.png');
+        this.load.image('bunNormal', 'assets/ingredients/bunNormal.png');
+        this.load.image('tomato', 'assets/ingredients/tomato.png');
+        this.load.image('cheese', 'assets/ingredients/cheese.png');
+        this.load.image('lettuce', 'assets/ingredients/lettuce.png');
+    }
+
+    function create () {
+        console.log('create');
+        //  A simple background for our game
+        this.add.image(400, 300, 'cafe');
+
+        const recipeIng = recipeIngredients();
+        recipe  = this.add.text(50, 70, 'recipe:' + recipeIng, { fontSize: '24px', fill: '#FFF' });
+
+        recipeIng.forEach( (ingredient, i) => {
+            const parseIndex = i + 1;
+            this.add.image(0 + (parseIndex * 100), 150, 'square').setScale(.1);
+            window['recipeIng' + parseIndex] = this.add.image(0 + (parseIndex * 100), 150, ingredient).setScale(.5);
+        });
+
+        cursors = this.input.keyboard.createCursorKeys();
+    }
+
+    function update () {
+        if (cursors.down.isDown) {
+            console.log('down');
+        }
+    }
+
+    function recipeIngredients() {
+        const howManyIngredients = Math.floor(Math.random() * (5 - 2) + 2);
+        const ingredients = ['lettuce', 'cheese', 'tomato'];
+        const recipe = ['bunNormal'];
+        Array.from({length: howManyIngredients}, (v, i) => i).forEach(it => {
+            recipe.push(ingredients[Math.floor(Math.random()*ingredients.length)]);
+        });
+        return recipe;
+    }
+
+</script>
+
+</body>
+</html>
