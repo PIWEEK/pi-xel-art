@@ -47,6 +47,10 @@
     let recipeIng3;
     let recipeIng4;
     let cursors;
+    let keyPressedCoolTime = new Date();
+    let ingredients;
+    let num_ingredients = 0;
+    let ingredientsText;
 
     let game = new Phaser.Game(config);
 
@@ -74,12 +78,36 @@
             window['recipeIng' + parseIndex] = this.add.image(0 + (parseIndex * 100), 150, ingredient).setScale(.5);
         });
 
+        // Ingredients
+        ingredients = this.physics.add.group({
+            collideWorldBounds: true,
+            bounceX: 0,
+            bounceY: 0,
+        });
+
+       // Cursors
         cursors = this.input.keyboard.createCursorKeys();
+
+        // Score
+        ingredientsText = this.add.text(16, 16, 'Ingredients: 0', { fontSize: '32px', fill: '#fff'});
+
+        // Colliders
+        this.physics.add.collider(ingredients, ingredients, collisionBetween);
     }
 
     function update () {
-        if (cursors.down.isDown) {
-            console.log('down');
+        if (cursors.down.isDown && checkKeyPressedCoolTime()){
+            ingredients.create(400, 10, 'tomato').setScale(.5).setOrigin(0,0.3);
+            newIngredient();
+        } else if (cursors.right.isDown && checkKeyPressedCoolTime()) {
+            ingredients.create(400, 10, 'cheese').setScale(.5).setOrigin(0,0.3);
+            newIngredient();
+        } else if (cursors.left.isDown && checkKeyPressedCoolTime()) {
+            ingredients.create(400, 10, 'lettuce').setScale(.5).setOrigin(0,0.3);
+            newIngredient();
+        } else if (cursors.up.isDown && checkKeyPressedCoolTime()) {
+            ingredients.create(400, 10, 'bunNormal').setScale(.5).setOrigin(0,0.3);
+            newIngredient();
         }
     }
 
@@ -91,6 +119,24 @@
             recipe.push(ingredients[Math.floor(Math.random()*ingredients.length)]);
         });
         return recipe;
+    }
+
+        function checkKeyPressedCoolTime() {
+        if (new Date() - keyPressedCoolTime > 500) {
+            keyPressedCoolTime = new Date();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function newIngredient() {
+        num_ingredients = ++num_ingredients
+        ingredientsText.setText('Ingredients: ' + num_ingredients);
+    }
+
+    function collisionBetween(ingOld, ingNew) {
+       // console.log('collision!');
     }
 
 </script>
