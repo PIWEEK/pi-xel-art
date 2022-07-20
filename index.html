@@ -42,15 +42,16 @@
     };
 
     let recipe;
-    let recipeIng1;
-    let recipeIng2;
-    let recipeIng3;
-    let recipeIng4;
+    let recipeIng;
+    let lastIntroducedIngredient;
     let cursors;
     let keyPressedCoolTime = new Date();
     let numIngredients = 0;
     let ingredientsText;
     let ingredientPosition = 430;
+    let tips = 0;
+    let tipsText;
+    let allTweens = [];
 
     let game = new Phaser.Game(config);
 
@@ -59,6 +60,7 @@
         this.load.image('cafe', 'assets/frames/cafe.jpg');
         this.load.image('square', 'assets/frames/square.png');
         this.load.image('bunNormal', 'assets/ingredients/bunNormal.png');
+        this.load.image('bunNormalTop', 'assets/ingredients/bunNormalTop.png');
         this.load.image('tomato', 'assets/ingredients/tomato.png');
         this.load.image('cheese', 'assets/ingredients/cheese.png');
         this.load.image('lettuce', 'assets/ingredients/lettuce.png');
@@ -73,37 +75,73 @@
        // Cursors
         cursors = this.input.keyboard.createCursorKeys();
 
-        // Score
-        ingredientsText = this.add.text(16, 16, 'Ingredients: 0', { fontSize: '32px', fill: '#fff'});
+        // Ingredients
+        ingredientsText = this.add.text(16, 16, 'Ingredients: 0', { fontSize: '24px', fill: '#fff'});
+
+        tipsText = this.add.text(16, 36, 'Tips: ' + tips, { fontSize: '24px', fill: '#fff'});
     }
 
     function update () {
         if (cursors.down.isDown && checkKeyPressedCoolTime()){
             stackIngredient(this, this.add.image(400, 0, 'tomato'));
+            checkResult(this, 'tomato');
         } else if (cursors.right.isDown && checkKeyPressedCoolTime()) {
             stackIngredient(this, this.add.image(400, 0, 'cheese'));
+            checkResult(this, 'cheese');
         } else if (cursors.left.isDown && checkKeyPressedCoolTime()) {
             stackIngredient(this, this.add.image(400, 0, 'lettuce'));
+            checkResult(this, 'lettuce');
         } else if (cursors.up.isDown && checkKeyPressedCoolTime()) {
             stackIngredient(this, this.add.image(400, 0, 'bunNormal'));
-        } else if (cursors.space.isDown && checkKeyPressedCoolTime()) {
-            this.tweens.getAllTweens().forEach(tween => {
+            checkResult(this, 'bunNormal');
+        }
+    }
+
+    function checkResult(context, ingredient) {
+        if (recipeIng[numIngredients - 1] !== ingredient) {
+        // handleError
+        console.log('error');
+        setTimeout(() => {
+            allTweens.forEach(tween => {
                 tween.targets.forEach(img => {
                     img.destroy();
                 });
             });
-            resetValues(this);
+            resetValues(context);
+            tips -= 100
+            tipsText.setText('Tips: ' + tips);
+        }, 1000);
+        } else if (numIngredients === recipeIng.length && recipeIng[numIngredients - 1] === ingredient) {
+            // order complete
+            console.log('order complete');
+            setTimeout(() => {
+                stackIngredient(context, context.add.image(400, 0, 'bunNormalTop'));
+            }, 2000);
+            setTimeout(() => {
+                allTweens.forEach(tween => {
+                    tween.targets.forEach(img => {
+                        img.destroy();
+                    });
+                });
+                resetValues(context);
+                tips += 100
+                tipsText.setText('Tips: ' + tips);
+            }, 5000);
+        } else if (recipeIng[numIngredients - 1] === ingredient) {
+            // mark check introduced ingredient
+            console.log('mark check introduced ingredient', ingredient);
         }
     }
 
     function stackIngredient(context, img) {
-        context.tweens.add({
+        const tempTween = context.tweens.add({
             targets: img,
             y: ingredientPosition - (20 * numIngredients),
-            duration: 3000,
+            duration: 1000,
             ease: 'Power2',
-            completeDelay: 3000
+            completeDelay: 1000
         });
+        allTweens.push(tempTween);
         newIngredient();
     }
 
@@ -114,7 +152,7 @@
     }
 
     function setRecipe(context) {
-        const recipeIng = recipeIngredients();
+        recipeIng = recipeIngredients();
         if (recipe) {
             recipe.setText('recipe: ' + recipeIng);
         } else {
@@ -124,7 +162,7 @@
         recipeIng.forEach( (ingredient, i) => {
             const parseIndex = i + 1;
             context.add.image(0 + (parseIndex * 100), 150, 'square').setScale(.1);
-            window['recipeIng' + parseIndex] = context.add.image(0 + (parseIndex * 100), 150, ingredient).setScale(.5);
+            context.add.image(0 + (parseIndex * 100), 150, ingredient).setScale(.5);
         });
     }
 
