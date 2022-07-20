@@ -30,7 +30,7 @@
         physics: {
             default: 'arcade',
             arcade: {
-                gravity: { y: 00 },
+                gravity: { y: 200 },
                 debug: false
             }
         },
@@ -48,24 +48,20 @@
     let recipeIng4;
     let cursors;
     let keyPressedCoolTime = new Date();
-    let ingredients;
-    let numIngredients = 0;
+    let num_ingredients = 0;
     let ingredientsText;
-    let target = new Phaser.Math.Vector2();
-    let isFirstIngredient = true;
-    const game = new Phaser.Game(config);
-    const tableHeight = config.height - 405;
-    const ingredientsSpeed = 200;
+    let ingredientPosition = 500;
 
+    let game = new Phaser.Game(config);
 
     function preload ()
     {
         this.load.image('cafe', 'assets/frames/cafe.jpg');
         this.load.image('square', 'assets/frames/square.png');
-        this.load.image('bunNormal', 'assets/ingredients/bunNormal2.png');
-        this.load.image('tomato', 'assets/ingredients/tomato2.png');
-        this.load.image('cheese', 'assets/ingredients/cheese2.png');
-        this.load.image('lettuce', 'assets/ingredients/lettuce2.png');
+        this.load.image('bunNormal', 'assets/ingredients/bunNormal.png');
+        this.load.image('tomato', 'assets/ingredients/tomato.png');
+        this.load.image('cheese', 'assets/ingredients/cheese.png');
+        this.load.image('lettuce', 'assets/ingredients/lettuce.png');
     }
 
     function create () {
@@ -82,28 +78,56 @@
             window['recipeIng' + parseIndex] = this.add.image(0 + (parseIndex * 100), 150, ingredient).setScale(.5);
         });
 
-        // Ingredients
-        ingredients = this.physics.add.group({collideWorldBounds: true});
-
        // Cursors
         cursors = this.input.keyboard.createCursorKeys();
 
         // Score
-        ingredientsText = this.add.text(config.weight, 16, 'Ingredients: 0', { fontSize: '24px', fill: '#FFF' });
-
-        // Colliders
-        this.physics.add.overlap(ingredients, ingredients, collisionBetween);
+        ingredientsText = this.add.text(16, 16, 'Ingredients: 0', { fontSize: '32px', fill: '#fff'});
     }
 
     function update () {
         if (cursors.down.isDown && checkKeyPressedCoolTime()){
-            addIngredient('tomato', this.physics);
+            let tomatoCursor = this.add.image(400, 0, 'tomato');
+            this.tweens.add({
+                targets: tomatoCursor,
+                y: ingredientPosition - (20 * num_ingredients),
+                duration: 3000,
+                ease: 'Power2',
+                completeDelay: 3000
+            });
+            newIngredient();
         } else if (cursors.right.isDown && checkKeyPressedCoolTime()) {
-            addIngredient('cheese', this.physics);
+            let cheeseCursor = this.add.image(400, 0, 'cheese');
+            this.tweens.add({
+                targets: cheeseCursor,
+                y: ingredientPosition - (20 * num_ingredients),
+                duration: 3000,
+                ease: 'Power2',
+                completeDelay: 3000
+            });
+            newIngredient();
         } else if (cursors.left.isDown && checkKeyPressedCoolTime()) {
-            addIngredient('lettuce', this.physics);
+            let lettuceCursor = this.add.image(400, 0, 'lettuce');
+            this.tweens.add({
+                targets: lettuceCursor,
+                y: ingredientPosition - (20 * num_ingredients),
+                duration: 3000,
+                ease: 'Power2',
+                completeDelay: 3000
+            });
+            newIngredient();
         } else if (cursors.up.isDown && checkKeyPressedCoolTime()) {
-            addIngredient('bunNormal', this.physics);
+            let bunNormal = this.add.image(400, 0, 'bunNormal');
+            this.tweens.add({
+                targets: bunNormal,
+                y: ingredientPosition - (20 * num_ingredients),
+                duration: 3000,
+                ease: 'Power2',
+                completeDelay: 3000
+            });
+            newIngredient();
+        } else if (cursors.space.isDown && checkKeyPressedCoolTime()) {
+            // try to delete here the burger
         }
     }
 
@@ -117,7 +141,7 @@
         return recipe;
     }
 
-    function checkKeyPressedCoolTime() {
+        function checkKeyPressedCoolTime() {
         if (new Date() - keyPressedCoolTime > 500) {
             keyPressedCoolTime = new Date();
             return true;
@@ -126,33 +150,13 @@
         }
     }
 
-    function addIngredient(ingredientName, physics) {
-        ing = ingredients.create(400, 30, ingredientName).setScale(.5).setOrigin(0,0.3);
-
-        if (isFirstIngredient) {
-            // it should be placed on the table where the rest of ingredients will be stacked afterwards
-            ing.setCircle(tableHeight);
-            isFirstIngredient = false;
-        }
-        // all the ingredients will try to move towards that point (some of them colliding with previous ingredients)
-        moveObjectToPoint(ing, 400, 200, physics);
-        refreshNumIngredients();
-    }
-
-    function moveObjectToPoint(ing, x, y, physics) {
-        target.x = x;
-        target.y = y;
-        physics.moveToObject(ing, target, false, ingredientsSpeed);
-    }
-
-    function refreshNumIngredients() {
-        numIngredients = ++numIngredients
-        ingredientsText.setText('Ingredients: ' + numIngredients);
+    function newIngredient() {
+        num_ingredients = ++num_ingredients
+        ingredientsText.setText('Ingredients: ' + num_ingredients);
     }
 
     function collisionBetween(ingOld, ingNew) {
-        // there's no gravity, so when a collision is detected we should stop the movement
-	    ingNew.body.stop();
+       // console.log('collision!');
     }
 
 </script>
