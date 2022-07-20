@@ -127,12 +127,11 @@
             });
             newIngredient();
         } else if (cursors.space.isDown && checkKeyPressedCoolTime()) {
-            // try to delete here the burger
-            for (const tween in this.tweens.getAllTweens()) {
-                for (const image in this.tweens.getAllTweens()[tween].targets) {
-                    this.tweens.getAllTweens()[tween].targets[image].destroy();
-                }
-            }
+            this.tweens.getAllTweens().forEach(tween => {
+                tween.targets.forEach(img => {
+                    img.destroy();
+                });
+            });
         }
     }
 
