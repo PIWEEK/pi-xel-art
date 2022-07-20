@@ -98,21 +98,21 @@
 
     function update () {
         if (isFirstIngredient) {
-            stackIngredient(this, this.add.image(400, 0, 'bunNormal'));
+            stackIngredient(this, this.add.image(400, 0, 'bunNormal'), false);
             isFirstIngredient = false;
         }
 
-        if (cursors.down.isDown && checkKeyPressedCoolTime()){
-            stackIngredient(this, this.add.image(400, 0, 'tomato'));
+        if (cursors.down.isDown && checkKeyPressedCoolTime()) {
+            stackIngredient(this, this.add.image(400, 0, 'tomato'), true);
             checkResult(this, 'tomato');
         } else if (cursors.right.isDown && checkKeyPressedCoolTime()) {
-            stackIngredient(this, this.add.image(400, 0, 'cheese'));
+            stackIngredient(this, this.add.image(400, 0, 'cheese'), true);
             checkResult(this, 'cheese');
         } else if (cursors.left.isDown && checkKeyPressedCoolTime()) {
-            stackIngredient(this, this.add.image(400, 0, 'lettuce'));
+            stackIngredient(this, this.add.image(400, 0, 'lettuce'), true);
             checkResult(this, 'lettuce');
         } else if (cursors.up.isDown && checkKeyPressedCoolTime()) {
-            stackIngredient(this, this.add.image(400, 0, 'meat'));
+            stackIngredient(this, this.add.image(400, 0, 'meat'), true);
             checkResult(this, 'meat');
         }
     }
@@ -139,7 +139,7 @@
             // order complete
             console.log('order complete');
             setTimeout(() => {
-                stackIngredient(context, context.add.image(400, 0, 'bunNormalTop'));
+                stackIngredient(context, context.add.image(400, 0, 'bunNormalTop'), false);
             }, 2000);
             setTimeout(() => {
                 allTweens.forEach(tween => {
@@ -157,7 +157,7 @@
         }
     }
 
-    function stackIngredient(context, img) {
+    function stackIngredient(context, img, addNewIngredient) {
         const tempTween = context.tweens.add({
             targets: img,
             y: ingredientPosition - (20 * numIngredients),
@@ -166,7 +166,7 @@
             completeDelay: 1000
         });
         allTweens.push(tempTween);
-        newIngredient();
+        addNewIngredient && newIngredient();
     }
 
     function resetValues(context) {
