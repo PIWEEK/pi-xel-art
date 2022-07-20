@@ -53,22 +53,37 @@
     let tipsText;
     let allTweens = [];
 
+    let isFirstIngredient = true;
+
+    // Aspect customization
+    const iconStartPosX = 150;
+    const iconStartPosY = 110;
+    const iconSize = 50;
+    const iconGap = 50;
+
     let game = new Phaser.Game(config);
 
     function preload ()
     {
-        this.load.image('cafe', 'assets/frames/cafe.jpg');
         this.load.image('square', 'assets/frames/square.png');
-        this.load.image('bunNormal', 'assets/ingredients/bunNormal.png');
         this.load.image('bunNormalTop', 'assets/ingredients/bunNormalTop.png');
+        this.load.image('bunNormal', 'assets/ingredients/bunNormal.png');
+        this.load.image('bunNormalIcon', 'assets/icons/bread.png');
         this.load.image('tomato', 'assets/ingredients/tomato.png');
+        // TODO: change it to tomato
+        this.load.image('tomatoIcon', 'assets/icons/bbq.png');
         this.load.image('cheese', 'assets/ingredients/cheese.png');
+        this.load.image('cheeseIcon', 'assets/icons/cheese.png');
         this.load.image('lettuce', 'assets/ingredients/lettuce.png');
+        this.load.image('lettuceIcon', 'assets/icons/lettuce.png');
+        this.load.image('meat', 'assets/ingredients/BeefPatty.png');
+        this.load.image('meatIcon', 'assets/icons/meat.png');
+        this.load.image('counter', 'assets/others/counter.png');
     }
 
     function create () {
         //  A simple background for our game
-        this.add.image(400, 300, 'cafe');
+        createBackgroundScenario(this);
 
         setRecipe(this);
 
@@ -82,6 +97,11 @@
     }
 
     function update () {
+        if (isFirstIngredient) {
+            stackIngredient(this, this.add.image(400, 0, 'bunNormal'));
+            isFirstIngredient = false;
+        }
+
         if (cursors.down.isDown && checkKeyPressedCoolTime()){
             stackIngredient(this, this.add.image(400, 0, 'tomato'));
             checkResult(this, 'tomato');
@@ -92,9 +112,13 @@
             stackIngredient(this, this.add.image(400, 0, 'lettuce'));
             checkResult(this, 'lettuce');
         } else if (cursors.up.isDown && checkKeyPressedCoolTime()) {
-            stackIngredient(this, this.add.image(400, 0, 'bunNormal'));
-            checkResult(this, 'bunNormal');
+            stackIngredient(this, this.add.image(400, 0, 'meat'));
+            checkResult(this, 'meat');
         }
+    }
+
+    function createBackgroundScenario(context) {
+        context.add.image(0, 380, 'counter').setOrigin(0, 0);
     }
 
     function checkResult(context, ingredient) {
@@ -149,6 +173,7 @@
         setRecipe(context);
         numIngredients = 0;
         ingredientPosition = 430;
+        isFirstIngredient = true;
     }
 
     function setRecipe(context) {
@@ -160,16 +185,14 @@
         }
 
         recipeIng.forEach( (ingredient, i) => {
-            const parseIndex = i + 1;
-            context.add.image(0 + (parseIndex * 100), 150, 'square').setScale(.1);
-            context.add.image(0 + (parseIndex * 100), 150, ingredient).setScale(.5);
+            context.add.image(iconStartPosX + ((iconSize + iconGap) *i), iconStartPosY, ingredient+'Icon').setOrigin(0, 0).setScale(1);
         });
     }
 
     function recipeIngredients() {
         const howManyIngredients = Math.floor(Math.random() * (5 - 2) + 2);
-        const ingredients = ['lettuce', 'cheese', 'tomato'];
-        const recipe = ['bunNormal'];
+        const ingredients = ['meat', 'lettuce', 'cheese', 'tomato'];
+        const recipe = [];
         Array.from({length: howManyIngredients}, (v, i) => i).forEach(it => {
             recipe.push(ingredients[Math.floor(Math.random()*ingredients.length)]);
         });
