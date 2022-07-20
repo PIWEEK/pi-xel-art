@@ -48,7 +48,7 @@
     let recipeIng4;
     let cursors;
     let keyPressedCoolTime = new Date();
-    let num_ingredients = 0;
+    let numIngredients = 0;
     let ingredientsText;
     let ingredientPosition = 430;
 
@@ -90,7 +90,7 @@
             let tomatoCursor = this.add.image(400, 0, 'tomato');
             this.tweens.add({
                 targets: tomatoCursor,
-                y: ingredientPosition - (20 * num_ingredients),
+                y: ingredientPosition - (20 * numIngredients),
                 duration: 3000,
                 ease: 'Power2',
                 completeDelay: 3000
@@ -100,7 +100,7 @@
             let cheeseCursor = this.add.image(400, 0, 'cheese');
             this.tweens.add({
                 targets: cheeseCursor,
-                y: ingredientPosition - (20 * num_ingredients),
+                y: ingredientPosition - (20 * numIngredients),
                 duration: 3000,
                 ease: 'Power2',
                 completeDelay: 3000
@@ -110,7 +110,7 @@
             let lettuceCursor = this.add.image(400, 0, 'lettuce');
             this.tweens.add({
                 targets: lettuceCursor,
-                y: ingredientPosition - (20 * num_ingredients),
+                y: ingredientPosition - (20 * numIngredients),
                 duration: 3000,
                 ease: 'Power2',
                 completeDelay: 3000
@@ -120,7 +120,7 @@
             let bunNormal = this.add.image(400, 0, 'bunNormal');
             this.tweens.add({
                 targets: bunNormal,
-                y: ingredientPosition - (20 * num_ingredients),
+                y: ingredientPosition - (20 * numIngredients),
                 duration: 3000,
                 ease: 'Power2',
                 completeDelay: 3000
@@ -132,6 +132,7 @@
                     img.destroy();
                 });
             });
+            numIngredients = 0;
         }
     }
 
@@ -155,8 +156,8 @@
     }
 
     function newIngredient() {
-        num_ingredients = ++num_ingredients
-        ingredientsText.setText('Ingredients: ' + num_ingredients);
+        numIngredients = ++numIngredients
+        ingredientsText.setText('Ingredients: ' + numIngredients);
     }
 
     function collisionBetween(ingOld, ingNew) {
