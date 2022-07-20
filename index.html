@@ -79,56 +79,35 @@
 
     function update () {
         if (cursors.down.isDown && checkKeyPressedCoolTime()){
-            let tomatoCursor = this.add.image(400, 0, 'tomato');
-            this.tweens.add({
-                targets: tomatoCursor,
-                y: ingredientPosition - (20 * numIngredients),
-                duration: 3000,
-                ease: 'Power2',
-                completeDelay: 3000
-            });
-            newIngredient();
+            stackIngredient(this, this.add.image(400, 0, 'tomato'));
         } else if (cursors.right.isDown && checkKeyPressedCoolTime()) {
-            let cheeseCursor = this.add.image(400, 0, 'cheese');
-            this.tweens.add({
-                targets: cheeseCursor,
-                y: ingredientPosition - (20 * numIngredients),
-                duration: 3000,
-                ease: 'Power2',
-                completeDelay: 3000
-            });
-            newIngredient();
+            stackIngredient(this, this.add.image(400, 0, 'cheese'));
         } else if (cursors.left.isDown && checkKeyPressedCoolTime()) {
-            let lettuceCursor = this.add.image(400, 0, 'lettuce');
-            this.tweens.add({
-                targets: lettuceCursor,
-                y: ingredientPosition - (20 * numIngredients),
-                duration: 3000,
-                ease: 'Power2',
-                completeDelay: 3000
-            });
-            newIngredient();
+            stackIngredient(this, this.add.image(400, 0, 'lettuce'));
         } else if (cursors.up.isDown && checkKeyPressedCoolTime()) {
-            let bunNormal = this.add.image(400, 0, 'bunNormal');
-            this.tweens.add({
-                targets: bunNormal,
-                y: ingredientPosition - (20 * numIngredients),
-                duration: 3000,
-                ease: 'Power2',
-                completeDelay: 3000
-            });
-            newIngredient();
+            stackIngredient(this, this.add.image(400, 0, 'bunNormal'));
         } else if (cursors.space.isDown && checkKeyPressedCoolTime()) {
+            this.tweens.getAllTweens().forEach(tween => {
+                tween.targets.forEach(img => {
+                    img.destroy();
+                });
+            });
             resetValues(this);
         }
     }
 
-    function resetValues(context) {
-        context.tweens.getAllTweens().forEach(tween => {
-            tween.targets.forEach(img => {
-                img.destroy();
-            });
+    function stackIngredient(context, img) {
+        context.tweens.add({
+            targets: img,
+            y: ingredientPosition - (20 * numIngredients),
+            duration: 3000,
+            ease: 'Power2',
+            completeDelay: 3000
         });
+        newIngredient();
+    }
+
+    function resetValues(context) {
         setRecipe(context);
         numIngredients = 0;
         ingredientPosition = 430;
@@ -136,7 +115,11 @@
 
     function setRecipe(context) {
         const recipeIng = recipeIngredients();
-        recipe = context.add.text(50, 70, 'recipe:' + recipeIng, { fontSize: '24px', fill: '#FFF' });
+        if (recipe) {
+            recipe.setText('recipe: ' + recipeIng);
+        } else {
+            recipe = context.add.text(50, 70, 'recipe:' + recipeIng, { fontSize: '24px', fill: '#FFF' });
+        }
 
         recipeIng.forEach( (ingredient, i) => {
             const parseIndex = i + 1;
@@ -167,10 +150,6 @@
     function newIngredient() {
         numIngredients = ++numIngredients
         ingredientsText.setText('Ingredients: ' + numIngredients);
-    }
-
-    function collisionBetween(ingOld, ingNew) {
-       // console.log('collision!');
     }
 
 </script>
