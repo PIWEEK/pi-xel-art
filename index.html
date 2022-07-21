@@ -162,15 +162,23 @@
     }
 
     function stackIngredient(context, img, addNewIngredient) {
+        addNewIngredient && newIngredient();
+        let yValue;
+        if (numIngredients === 0) {
+            yValue = ingredientPosition;
+        } else if (!addNewIngredient && numIngredients === recipeIng.length) {
+            yValue = ingredientPosition - (15 * (numIngredients + 1));
+        } else {
+            yValue = ingredientPosition - (15 * numIngredients);
+        }
         const tempTween = context.tweens.add({
             targets: img,
-            y: ingredientPosition - (20 * numIngredients),
+            y: yValue,
             duration: 1000,
             ease: 'Power2',
             completeDelay: 1000
         });
         allTweens.push(tempTween);
-        addNewIngredient && newIngredient();
     }
 
     function resetValues(context) {
