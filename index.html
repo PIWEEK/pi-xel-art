@@ -145,7 +145,7 @@
         } else if (numIngredients === recipeIng.length && recipeIng[index] === ingredient) {
             // order complete
             console.log('order complete');
-            recipeImgList[index].alpha = 0.5;
+            recipeImgList[index].alpha = 0.2;
             setTimeout(() => {
                 stackIngredient(context, context.add.image(trayHambX, 0, 'bunNormalTop'), false);
             }, 1000);
@@ -162,7 +162,7 @@
         } else if (recipeIng[index] === ingredient) {
             // mark check introduced ingredient
             console.log('mark check introduced ingredient', ingredient);
-            recipeImgList[index].alpha = 0.5;
+            recipeImgList[index].alpha = 0.2;
         }
     }
 
