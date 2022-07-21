@@ -60,9 +60,9 @@
     const iconStartPosY = 110;
     const iconSize = 50;
     const iconGap = 50;
-    const trayPosX = 305;
-    const trayPosY = 415;
-
+    const trayPosX = 125;
+    const trayPosY = 412;
+    const trayHambX = trayPosX+95;
 
     let game = new Phaser.Game(config);
 
@@ -105,21 +105,21 @@
 
     function update () {
         if (isFirstIngredient) {
-            stackIngredient(this, this.add.image(400, 0, 'bunNormal'), false);
+            stackIngredient(this, this.add.image(trayPosX+95, 0, 'bunNormal'), false);
             isFirstIngredient = false;
         }
 
         if (cursors.down.isDown && checkKeyPressedCoolTime()) {
-            stackIngredient(this, this.add.image(400, 0, 'tomato'), true);
+            stackIngredient(this, this.add.image(trayHambX, 0, 'tomato'), true);
             checkResult(this, 'tomato');
         } else if (cursors.right.isDown && checkKeyPressedCoolTime()) {
-            stackIngredient(this, this.add.image(400, 0, 'cheese'), true);
+            stackIngredient(this, this.add.image(trayHambX, 0, 'cheese'), true);
             checkResult(this, 'cheese');
         } else if (cursors.left.isDown && checkKeyPressedCoolTime()) {
-            stackIngredient(this, this.add.image(400, 0, 'lettuce'), true);
+            stackIngredient(this, this.add.image(trayHambX, 0, 'lettuce'), true);
             checkResult(this, 'lettuce');
         } else if (cursors.up.isDown && checkKeyPressedCoolTime()) {
-            stackIngredient(this, this.add.image(400, 0, 'meat'), true);
+            stackIngredient(this, this.add.image(trayHambX, 0, 'meat'), true);
             checkResult(this, 'meat');
         }
     }
@@ -155,7 +155,7 @@
             // order complete
             console.log('order complete');
             setTimeout(() => {
-                stackIngredient(context, context.add.image(400, 0, 'bunNormalTop'), false);
+                stackIngredient(context, context.add.image(trayHambX, 0, 'bunNormalTop'), false);
             }, 2000);
             setTimeout(() => {
                 allTweens.forEach(tween => {
