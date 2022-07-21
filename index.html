@@ -5,6 +5,7 @@
     <title>Pi-xel-art</title>
     <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
     <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
         html {
             background-color: black;
         }
@@ -43,6 +44,7 @@
 
     let recipeIng;
     let recipeImgList = [];
+    let menuExtrasImgList = [];
     let completeBurgerExample = [];
     let cursors;
     let keyPressedCoolTime = new Date();
@@ -81,7 +83,11 @@
         this.load.image('meat', 'assets/ingredients/BeefPatty.png');
         this.load.image('meatIcon', 'assets/icons/meat.png');
         this.load.image('sodaCoke', 'assets/others/sodaCoke.png');
+        this.load.image('sodaPink', 'assets/others/sodaPink.png');
+        this.load.image('sodaFanta', 'assets/others/sodaFanta.png');
         this.load.image('fries', 'assets/others/fries.png');
+        this.load.image('nuggets', 'assets/others/nuggets-dish.png');
+        this.load.image('pie', 'assets/others/apple-pie.png');
         this.load.image('customerA', 'assets/clients/client1.png');
         this.load.image('customerB', 'assets/clients/client2.png');
     }
@@ -91,12 +97,13 @@
         createBackgroundScenario(this);
 
         setRecipe(this);
+        setMenuExtras(this);
         setCustomer(this);
 
        // Cursors
         cursors = this.input.keyboard.createCursorKeys();
 
-        tipsText = this.add.text(16, 36, 'Tips: ' + tips, { fontSize: '24px', fill: '#fff'});
+        tipsText = this.add.text(16, 36, 'Tips: ' + tips + ' $', { fontFamily: 'VT323', fontSize: '24px', fill: '#fff'});
     }
 
     function update () {
@@ -104,7 +111,6 @@
             stackIngredient(this, this.add.image(trayHambX, 0, 'bunNormal'), false);
             isFirstIngredient = false;
         }
-
         if (cursors.down.isDown && checkKeyPressedCoolTime()) {
             stackIngredient(this, this.add.image(trayHambX, 0, 'tomato'), true);
             checkResult(this, 'tomato');
@@ -116,15 +122,12 @@
             checkResult(this, 'lettuce');
         } else if (cursors.up.isDown && checkKeyPressedCoolTime()) {
             stackIngredient(this, this.add.image(trayHambX, 0, 'meat'), true);
-            checkResult(this, 'meat');
+            checkResult(this, 'meat',);
         }
     }
 
     function createBackgroundScenario(context) {
         context.add.image(400, 300, 'bg');
-        context.add.image(trayPosX+150, trayPosY-98, 'sodaCoke').setOrigin(0, 0);
-        context.add.image(trayPosX+165, trayPosY-30, 'fries').setOrigin(0, 0);
-
         context.add.image(445, 195, 'meatIcon').setOrigin(0, 0);
         context.add.image(445, 325, 'tomatoIcon').setOrigin(0, 0);
         context.add.image(380, 260, 'lettuceIcon').setOrigin(0, 0);
@@ -144,7 +147,7 @@
             });
             resetValues(context);
             tips -= 100
-            tipsText.setText('Tips: ' + tips);
+            tipsText.setText('Tips: ' + tips + ' $');
         }, 1000);
         } else if (numIngredients === recipeIng.length && recipeIng[index] === ingredient) {
             // order complete
@@ -161,7 +164,7 @@
                 });
                 resetValues(context);
                 tips += 100
-                tipsText.setText('Tips: ' + tips);
+                tipsText.setText('Tips: ' + tips + ' $');
             }, 3000);
         } else if (recipeIng[index] === ingredient) {
             // mark check introduced ingredient
@@ -192,10 +195,37 @@
 
     function resetValues(context) {
         setRecipe(context);
+        setMenuExtras(context);
         setCustomer(context);
         numIngredients = 0;
         ingredientPosition = 410;
         isFirstIngredient = true;
+    }
+
+    function getRandomMenuExtras(context) {
+        const drinks = ['sodaCoke', 'sodaFanta', 'sodaPink'];
+        const sides = ['fries', 'pie', 'nuggets'];
+
+        randomExtras = [];
+        randomExtras.push(drinks[Math.floor(Math.random()*drinks.length)]);
+        randomExtras.push(sides[Math.floor(Math.random()*sides.length)]);
+
+        return randomExtras;
+    }
+
+    function setMenuExtras(context) {
+        menuExtrasImgList.forEach(img => img.destroy())
+        menuExtrasImgList = [];
+        menuExtras = getRandomMenuExtras();
+
+        const drink = context.add.image(trayPosX+138,trayPosY-98, menuExtras[0]).setOrigin(0, 0).setDepth(1);
+        let side;
+        if (menuExtras[1] == 'fries') {
+            side = context.add.image(trayPosX+160,trayPosY-35, menuExtras[1]).setOrigin(0, 0).setDepth(1);
+        } else {
+            side = context.add.image(trayPosX+150,trayPosY-30, menuExtras[1]).setOrigin(0, 0).setDepth(1);
+        }
+        menuExtrasImgList = [drink, side];
     }
 
     function setRecipe(context) {
