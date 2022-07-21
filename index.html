@@ -145,7 +145,10 @@
                     img.destroy();
                 });
             });
-            resetValues(context);
+            clearMenuExtras();
+            setTimeout(() => {
+                resetValues(context);
+            }, 1000);
             tips -= 100
             tipsText.setText(tips + ' €');
         }, 1000);
@@ -162,7 +165,10 @@
                         img.destroy();
                     });
                 });
-                resetValues(context);
+                clearMenuExtras();
+                setTimeout(() => {
+                    resetValues(context);
+                }, 1000);
                 tips += 100
                 tipsText.setText(tips + ' €');
             }, 3000);
@@ -206,16 +212,20 @@
         const drinks = ['sodaCoke', 'sodaFanta', 'sodaPink'];
         const sides = ['fries', 'pie', 'nuggets'];
 
-        randomExtras = [];
+        let randomExtras = [];
         randomExtras.push(drinks[Math.floor(Math.random()*drinks.length)]);
         randomExtras.push(sides[Math.floor(Math.random()*sides.length)]);
 
         return randomExtras;
     }
 
-    function setMenuExtras(context) {
-        menuExtrasImgList.forEach(img => img.destroy())
+    function clearMenuExtras() {
+        menuExtrasImgList.forEach(img => img.destroy());
         menuExtrasImgList = [];
+    }
+
+    function setMenuExtras(context) {
+        clearMenuExtras();
         menuExtras = getRandomMenuExtras();
 
         const drink = context.add.image(trayPosX+138,trayPosY-98, menuExtras[0]).setOrigin(0, 0).setDepth(1);
@@ -244,7 +254,7 @@
         completeBurgerExample = [];
         const recipeImgExample = ['bunNormal', ...recipeIng, 'bunNormalTop'];
         recipeImgExample.forEach( (ingredient, i) => {
-            const tempImg = context.add.image(98, (255 - (i * 7)), ingredient).setOrigin(0, 0).setScale(.5);
+            const tempImg = context.add.image(98, (254 - (i * 7)), ingredient).setOrigin(0, 0).setScale(.5);
             completeBurgerExample.push(tempImg);
         });
     }
