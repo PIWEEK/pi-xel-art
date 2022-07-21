@@ -54,7 +54,7 @@
     let tipsText;
     let allTweens = [];
     let customer;
-
+    let pausedKeys = false;
     let isFirstIngredient = true;
 
     // Aspect customization
@@ -111,16 +111,16 @@
             stackIngredient(this, this.add.image(trayHambX, 0, 'bunNormal'), false);
             isFirstIngredient = false;
         }
-        if (cursors.down.isDown && checkKeyPressedCoolTime()) {
+        if (cursors.down.isDown && checkKeyPressedCoolTime() && !pausedKeys) {
             stackIngredient(this, this.add.image(trayHambX, 0, 'tomato'), true);
             checkResult(this, 'tomato');
-        } else if (cursors.right.isDown && checkKeyPressedCoolTime()) {
+        } else if (cursors.right.isDown && checkKeyPressedCoolTime() && !pausedKeys) {
             stackIngredient(this, this.add.image(trayHambX, 0, 'cheese'), true);
             checkResult(this, 'cheese');
-        } else if (cursors.left.isDown && checkKeyPressedCoolTime()) {
+        } else if (cursors.left.isDown && checkKeyPressedCoolTime() && !pausedKeys) {
             stackIngredient(this, this.add.image(trayHambX, 0, 'lettuce'), true);
             checkResult(this, 'lettuce');
-        } else if (cursors.up.isDown && checkKeyPressedCoolTime()) {
+        } else if (cursors.up.isDown && checkKeyPressedCoolTime() && !pausedKeys) {
             stackIngredient(this, this.add.image(trayHambX, 0, 'meat'), true);
             checkResult(this, 'meat',);
         }
@@ -146,6 +146,7 @@
                 });
             });
             clearMenuExtras();
+            pausedKeys = true;
             setTimeout(() => {
                 resetValues(context);
             }, 1000);
@@ -166,6 +167,7 @@
                     });
                 });
                 clearMenuExtras();
+                pausedKeys = true;
                 setTimeout(() => {
                     resetValues(context);
                 }, 1000);
@@ -206,6 +208,7 @@
         numIngredients = 0;
         ingredientPosition = 419;
         isFirstIngredient = true;
+        pausedKeys = false;
     }
 
     function getRandomMenuExtras(context) {
