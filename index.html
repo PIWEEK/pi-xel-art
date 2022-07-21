@@ -72,8 +72,7 @@
         this.load.image('bunNormal', 'assets/ingredients/bunNormal.png');
         this.load.image('bunNormalIcon', 'assets/icons/bread.png');
         this.load.image('tomato', 'assets/ingredients/tomato.png');
-        // TODO: change it to tomato
-        this.load.image('tomatoIcon', 'assets/icons/bbq.png');
+        this.load.image('tomatoIcon', 'assets/icons/tomato.png');
         this.load.image('cheese', 'assets/ingredients/cheese.png');
         this.load.image('cheeseIcon', 'assets/icons/cheese.png');
         this.load.image('lettuce', 'assets/ingredients/lettuce.png');
@@ -119,8 +118,8 @@
 
     function createBackgroundScenario(context) {
         context.add.image(400, 300, 'bg');
-        context.add.image(trayPosX+150, trayPosY-98, 'sodaCoke').setOrigin(0, 0).setScale(1);
-        context.add.image(trayPosX+165, trayPosY-30, 'fries').setOrigin(0, 0).setScale(1.4);
+        context.add.image(trayPosX+150, trayPosY-98, 'sodaCoke').setOrigin(0, 0);
+        context.add.image(trayPosX+165, trayPosY-30, 'fries').setOrigin(0, 0);
 
         context.add.image(445, 195, 'meatIcon').setOrigin(0, 0);
         context.add.image(445, 325, 'tomatoIcon').setOrigin(0, 0);
