@@ -148,7 +148,7 @@
             recipeImgList[index].alpha = 0.5;
             setTimeout(() => {
                 stackIngredient(context, context.add.image(trayHambX, 0, 'bunNormalTop'), false);
-            }, 2000);
+            }, 1000);
             setTimeout(() => {
                 allTweens.forEach(tween => {
                     tween.targets.forEach(img => {
@@ -158,7 +158,7 @@
                 resetValues(context);
                 tips += 100
                 tipsText.setText('Tips: ' + tips);
-            }, 5000);
+            }, 3000);
         } else if (recipeIng[index] === ingredient) {
             // mark check introduced ingredient
             console.log('mark check introduced ingredient', ingredient);
