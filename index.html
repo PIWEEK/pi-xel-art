@@ -43,6 +43,7 @@
 
     let recipeIng;
     let recipeImgList = [];
+    let completeBurgerExample = [];
     let cursors;
     let keyPressedCoolTime = new Date();
     let numIngredients = 0;
@@ -194,13 +195,23 @@
     }
 
     function setRecipe(context) {
-        recipeImgList.forEach(img => img.destroy())
+        recipeImgList.forEach(img => img.destroy());
         recipeImgList = [];
         recipeIng = recipeIngredients();
 
+        // icon menu
         recipeIng.forEach( (ingredient, i) => {
             const tempImg = context.add.image(iconStartPosX + ((iconSize + iconGap) *i), iconStartPosY, ingredient+'Icon').setOrigin(0, 0);
             recipeImgList.push(tempImg);
+        });
+
+        // complete burger example
+        completeBurgerExample.length && completeBurgerExample.forEach(img => img.destroy());
+        completeBurgerExample = [];
+        const recipeImgExample = ['bunNormal', ...recipeIng, 'bunNormalTop'];
+        recipeImgExample.forEach( (ingredient, i) => {
+            const tempImg = context.add.image(35, (250 - (i * 7)), ingredient).setOrigin(0, 0).setScale(.5);
+            completeBurgerExample.push(tempImg);
         });
     }
 
