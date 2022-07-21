@@ -51,6 +51,7 @@
     let tips = 0;
     let tipsText;
     let allTweens = [];
+    let customer;
 
     let isFirstIngredient = true;
 
@@ -81,6 +82,8 @@
         this.load.image('meatIcon', 'assets/icons/meat.png');
         this.load.image('sodaCoke', 'assets/others/sodaCoke.png');
         this.load.image('fries', 'assets/others/fries.png');
+        this.load.image('customerA', 'assets/clients/client1.png');
+        this.load.image('customerB', 'assets/clients/client2.png');
     }
 
     function create () {
@@ -88,6 +91,7 @@
         createBackgroundScenario(this);
 
         setRecipe(this);
+        setCustomer(this);
 
        // Cursors
         cursors = this.input.keyboard.createCursorKeys();
@@ -188,6 +192,7 @@
 
     function resetValues(context) {
         setRecipe(context);
+        setCustomer(context);
         numIngredients = 0;
         ingredientPosition = 410;
         isFirstIngredient = true;
@@ -212,6 +217,12 @@
             const tempImg = context.add.image(35, (250 - (i * 7)), ingredient).setOrigin(0, 0).setScale(.5);
             completeBurgerExample.push(tempImg);
         });
+    }
+
+    function setCustomer(context) {
+        customer && customer.destroy();
+        const customerOptions = ['customerA', 'customerB'];
+        customer = context.add.image(145, 140, customerOptions[Math.floor(Math.random()*customerOptions.length)]).setOrigin(0, 0);
     }
 
     function recipeIngredients() {
