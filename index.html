@@ -103,7 +103,7 @@
        // Cursors
         cursors = this.input.keyboard.createCursorKeys();
 
-        tipsText = this.add.text(16, 36, 'Tips: ' + tips + ' €', { fontFamily: 'VT323', fontSize: '24px', fill: '#fff'});
+        tipsText = this.add.text(655, 285, tips + ' €', { fontFamily: 'VT323', fontSize: '24px', fill: '#fff', align: 'left'}).setOrigin(0, 0);
     }
 
     function update () {
@@ -147,7 +147,7 @@
             });
             resetValues(context);
             tips -= 100
-            tipsText.setText('Tips: ' + tips + ' €');
+            tipsText.setText(tips + ' €');
         }, 1000);
         } else if (numIngredients === recipeIng.length && recipeIng[index] === ingredient) {
             // order complete
@@ -164,7 +164,7 @@
                 });
                 resetValues(context);
                 tips += 100
-                tipsText.setText('Tips: ' + tips + ' €');
+                tipsText.setText(tips + ' €');
             }, 3000);
         } else if (recipeIng[index] === ingredient) {
             // mark check introduced ingredient
@@ -244,7 +244,7 @@
         completeBurgerExample = [];
         const recipeImgExample = ['bunNormal', ...recipeIng, 'bunNormalTop'];
         recipeImgExample.forEach( (ingredient, i) => {
-            const tempImg = context.add.image(35, (250 - (i * 7)), ingredient).setOrigin(0, 0).setScale(.5);
+            const tempImg = context.add.image(98, (255 - (i * 7)), ingredient).setOrigin(0, 0).setScale(.5);
             completeBurgerExample.push(tempImg);
         });
     }
