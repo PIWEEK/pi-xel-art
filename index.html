@@ -48,7 +48,7 @@
     let keyPressedCoolTime = new Date();
     let numIngredients = 0;
     let ingredientsText;
-    let ingredientPosition = 430;
+    let ingredientPosition = 460;
     let tips = 0;
     let tipsText;
     let allTweens = [];
@@ -60,6 +60,9 @@
     const iconStartPosY = 110;
     const iconSize = 50;
     const iconGap = 50;
+    const trayPosX = 305;
+    const trayPosY = 415;
+
 
     let game = new Phaser.Game(config);
 
@@ -79,6 +82,10 @@
         this.load.image('meat', 'assets/ingredients/BeefPatty.png');
         this.load.image('meatIcon', 'assets/icons/meat.png');
         this.load.image('counter', 'assets/others/counter.png');
+        this.load.image('tray', 'assets/others/tray.png');
+        this.load.image('dish', 'assets/others/dish.png');
+        this.load.image('sodaCoke', 'assets/others/sodaCoke.png');
+        this.load.image('fries', 'assets/others/fries.png');
     }
 
     function create () {
@@ -119,6 +126,11 @@
 
     function createBackgroundScenario(context) {
         context.add.image(0, 380, 'counter').setOrigin(0, 0);
+        context.add.image(trayPosX, trayPosY, 'tray').setOrigin(0, 0).setScale(1);
+        context.add.image(trayPosX+30, trayPosY+12, 'dish').setOrigin(0, 0).setScale(1);
+        context.add.image(trayPosX+150, trayPosY-98, 'sodaCoke').setOrigin(0, 0).setScale(1);
+        context.add.image(trayPosX+165, trayPosY-30, 'fries').setOrigin(0, 0).setScale(1.4);
+
         context.add.image(650, 100, 'meatIcon').setOrigin(0, 0).setScale(.5);
         context.add.image(650, 130, 'tomatoIcon').setOrigin(0, 0).setScale(.5);
         context.add.image(620, 130, 'lettuceIcon').setOrigin(0, 0).setScale(.5);
