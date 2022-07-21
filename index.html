@@ -41,14 +41,12 @@
         }
     };
 
-    let recipe;
     let recipeIng;
-    let lastIntroducedIngredient;
+    let recipeImgList = [];
     let cursors;
     let keyPressedCoolTime = new Date();
     let numIngredients = 0;
-    let ingredientsText;
-    let ingredientPosition = 460;
+    let ingredientPosition = 410;
     let tips = 0;
     let tipsText;
     let allTweens = [];
@@ -56,19 +54,19 @@
     let isFirstIngredient = true;
 
     // Aspect customization
-    const iconStartPosX = 150;
-    const iconStartPosY = 110;
+    const iconStartPosX = 140;
+    const iconStartPosY = 100;
     const iconSize = 50;
-    const iconGap = 50;
-    const trayPosX = 125;
-    const trayPosY = 412;
-    const trayHambX = trayPosX+95;
+    const iconGap = 10;
+    const trayPosX = 130;
+    const trayPosY = 380;
+    const trayHambX = 215;
 
     let game = new Phaser.Game(config);
 
     function preload ()
     {
-        this.load.image('square', 'assets/frames/square.png');
+        this.load.image('bg', 'ase/background.png');
         this.load.image('bunNormalTop', 'assets/ingredients/bunNormalTop.png');
         this.load.image('bunNormal', 'assets/ingredients/bunNormal.png');
         this.load.image('bunNormalIcon', 'assets/icons/bread.png');
@@ -81,9 +79,6 @@
         this.load.image('lettuceIcon', 'assets/icons/lettuce.png');
         this.load.image('meat', 'assets/ingredients/BeefPatty.png');
         this.load.image('meatIcon', 'assets/icons/meat.png');
-        this.load.image('counter', 'assets/others/counter.png');
-        this.load.image('tray', 'assets/others/tray.png');
-        this.load.image('dish', 'assets/others/dish.png');
         this.load.image('sodaCoke', 'assets/others/sodaCoke.png');
         this.load.image('fries', 'assets/others/fries.png');
     }
@@ -97,15 +92,12 @@
        // Cursors
         cursors = this.input.keyboard.createCursorKeys();
 
-        // Ingredients
-        ingredientsText = this.add.text(16, 16, 'Ingredients: 0', { fontSize: '24px', fill: '#fff'});
-
         tipsText = this.add.text(16, 36, 'Tips: ' + tips, { fontSize: '24px', fill: '#fff'});
     }
 
     function update () {
         if (isFirstIngredient) {
-            stackIngredient(this, this.add.image(trayPosX+95, 0, 'bunNormal'), false);
+            stackIngredient(this, this.add.image(trayHambX, 0, 'bunNormal'), false);
             isFirstIngredient = false;
         }
 
@@ -125,20 +117,19 @@
     }
 
     function createBackgroundScenario(context) {
-        context.add.image(0, 380, 'counter').setOrigin(0, 0);
-        context.add.image(trayPosX, trayPosY, 'tray').setOrigin(0, 0).setScale(1);
-        context.add.image(trayPosX+30, trayPosY+12, 'dish').setOrigin(0, 0).setScale(1);
+        context.add.image(400, 300, 'bg');
         context.add.image(trayPosX+150, trayPosY-98, 'sodaCoke').setOrigin(0, 0).setScale(1);
         context.add.image(trayPosX+165, trayPosY-30, 'fries').setOrigin(0, 0).setScale(1.4);
 
-        context.add.image(650, 100, 'meatIcon').setOrigin(0, 0).setScale(.5);
-        context.add.image(650, 130, 'tomatoIcon').setOrigin(0, 0).setScale(.5);
-        context.add.image(620, 130, 'lettuceIcon').setOrigin(0, 0).setScale(.5);
-        context.add.image(680, 130, 'cheeseIcon').setOrigin(0, 0).setScale(.5);
+        context.add.image(445, 195, 'meatIcon').setOrigin(0, 0);
+        context.add.image(445, 325, 'tomatoIcon').setOrigin(0, 0);
+        context.add.image(380, 260, 'lettuceIcon').setOrigin(0, 0);
+        context.add.image(510, 260, 'cheeseIcon').setOrigin(0, 0);
     }
 
     function checkResult(context, ingredient) {
-        if (recipeIng[numIngredients - 1] !== ingredient) {
+        const index = numIngredients - 1;
+        if (recipeIng[index] !== ingredient) {
         // handleError
         console.log('error');
         setTimeout(() => {
@@ -151,9 +142,10 @@
             tips -= 100
             tipsText.setText('Tips: ' + tips);
         }, 1000);
-        } else if (numIngredients === recipeIng.length && recipeIng[numIngredients - 1] === ingredient) {
+        } else if (numIngredients === recipeIng.length && recipeIng[index] === ingredient) {
             // order complete
             console.log('order complete');
+            recipeImgList[index].alpha = 0.5;
             setTimeout(() => {
                 stackIngredient(context, context.add.image(trayHambX, 0, 'bunNormalTop'), false);
             }, 2000);
@@ -167,9 +159,10 @@
                 tips += 100
                 tipsText.setText('Tips: ' + tips);
             }, 5000);
-        } else if (recipeIng[numIngredients - 1] === ingredient) {
+        } else if (recipeIng[index] === ingredient) {
             // mark check introduced ingredient
             console.log('mark check introduced ingredient', ingredient);
+            recipeImgList[index].alpha = 0.5;
         }
     }
 
@@ -196,21 +189,18 @@
     function resetValues(context) {
         setRecipe(context);
         numIngredients = 0;
-        ingredientPosition = 430;
+        ingredientPosition = 410;
         isFirstIngredient = true;
-        ingredientsText.setText('Ingredients: ' + numIngredients);
     }
 
     function setRecipe(context) {
+        recipeImgList.forEach(img => img.destroy())
+        recipeImgList = [];
         recipeIng = recipeIngredients();
-        if (recipe) {
-            recipe.setText('recipe: ' + recipeIng);
-        } else {
-            recipe = context.add.text(50, 70, 'recipe:' + recipeIng, { fontSize: '24px', fill: '#FFF' });
-        }
 
         recipeIng.forEach( (ingredient, i) => {
-            context.add.image(iconStartPosX + ((iconSize + iconGap) *i), iconStartPosY, ingredient+'Icon').setOrigin(0, 0).setScale(1);
+            const tempImg = context.add.image(iconStartPosX + ((iconSize + iconGap) *i), iconStartPosY, ingredient+'Icon').setOrigin(0, 0);
+            recipeImgList.push(tempImg);
         });
     }
 
@@ -234,8 +224,7 @@
     }
 
     function newIngredient() {
-        numIngredients = ++numIngredients
-        ingredientsText.setText('Ingredients: ' + numIngredients);
+        numIngredients = ++numIngredients;
     }
 
 </script>
