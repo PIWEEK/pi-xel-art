@@ -83,18 +83,23 @@
 
     //ingredients
     let currentIngredient = 0;
-    const patties = ['meat', 'chicken', 'veggie', 'bacon'];
-    const extra1 = ['cheese', 'lettuce', 'pickle', 'tomato'];
+    const patties = ['meat', 'chicken', 'veggie', 'fish'];
+    const extra1 = ['cheese', 'lettuce', 'pickle', 'bacon'];
+    const extra2 = ['tomato', 'mushroom', 'onion', 'egg'];
     const sauces = ['bbq', 'ketchup', 'mayo', 'mustard'];
     const mapIngredients = {
         'meat': patties,
         'chicken': patties,
         'veggie': patties,
-        'bacon': patties,
+        'fish': patties,
+        'bacon': extra1,
         'cheese': extra1,
         'lettuce': extra1,
         'pickle': extra1,
-        'tomato': extra1,
+        'tomato': extra2,
+        'onion': extra2,
+        'mushroom': extra2,
+        'egg': extra2,
         'bbq': sauces,
         'ketchup': sauces,
         'mayo': sauces,
@@ -119,6 +124,12 @@
         this.load.image('baconIcon', 'assets/icons/bacon.png');
         this.load.image('pickle', 'assets/ingredients/pickle.png');
         this.load.image('pickleIcon', 'assets/icons/pickle.png');
+        this.load.image('mushroom', 'assets/ingredients/mushroom.png');
+        this.load.image('mushroomIcon', 'assets/icons/mushroom.png');
+        this.load.image('egg', 'assets/ingredients/egg.png');
+        this.load.image('eggIcon', 'assets/icons/egg.png');
+        this.load.image('onion', 'assets/ingredients/onion.png');
+        this.load.image('onionIcon', 'assets/icons/onion.png');
         this.load.image('bbq', 'assets/ingredients/BBQSauce.png');
         this.load.image('bbqIcon', 'assets/icons/bbq.png');
         this.load.image('mustard', 'assets/ingredients/mustardSauce.png');
@@ -131,12 +142,15 @@
         this.load.image('meatIcon', 'assets/icons/meat.png');
         this.load.image('chicken', 'assets/ingredients/ChickenPatty.png');
         this.load.image('chickenIcon', 'assets/icons/chicken.png');
+        this.load.image('fish', 'assets/ingredients/fishPatty.png');
+        this.load.image('fishIcon', 'assets/icons/fish.png');
         this.load.image('veggie', 'assets/ingredients/VeggyPatty.png');
         this.load.image('veggieIcon', 'assets/icons/vegetal.png');
         this.load.image('sodaCoke', 'assets/others/sodaCoke.png');
         this.load.image('sodaPink', 'assets/others/sodaPink.png');
         this.load.image('sodaFanta', 'assets/others/sodaFanta.png');
         this.load.image('fries', 'assets/others/fries.png');
+        this.load.image('iceCream', 'assets/others/copa-helado.png');
         this.load.image('nuggets', 'assets/others/nuggets-dish.png');
         this.load.image('pie', 'assets/others/apple-pie.png');
         this.load.image('customerA', 'assets/clients/client1.png');
@@ -264,7 +278,7 @@
 
     function getRandomMenuExtras(context) {
         const drinks = ['sodaCoke', 'sodaFanta', 'sodaPink'];
-        const sides = ['fries', 'pie', 'nuggets'];
+        const sides = ['fries', 'pie', 'nuggets', 'iceCream'];
 
         let randomExtras = [];
         randomExtras.push(drinks[Math.floor(Math.random()*drinks.length)]);
@@ -284,7 +298,7 @@
 
         const drink = context.add.image(trayPosX+138,trayPosY-98, menuExtras[0]).setOrigin(0, 0).setDepth(1);
         let side;
-        if (menuExtras[1] == 'fries') {
+        if (menuExtras[1] == 'fries' || menuExtras[1] == 'iceCream') {
             side = context.add.image(trayPosX+160,trayPosY-35, menuExtras[1]).setOrigin(0, 0).setDepth(1);
         } else {
             side = context.add.image(trayPosX+150,trayPosY-30, menuExtras[1]).setOrigin(0, 0).setDepth(1);
@@ -347,7 +361,7 @@
 
     function recipeIngredients() {
         const howManyIngredients = Math.floor(Math.random() * (7 - 4) + 4);
-        const ingredients = [...patties, ...extra1, ...sauces];
+        const ingredients = [...patties, ...extra1, ...extra2,  ...sauces];
         const recipe = [];
         Array.from({length: howManyIngredients}, (v, i) => i).forEach(it => {
             recipe.push(ingredients[Math.floor(Math.random()*ingredients.length)]);
