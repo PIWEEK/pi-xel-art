@@ -74,7 +74,7 @@
 
     // Aspect customization
     const iconStartPosX = 140;
-    const iconStartPosY = 100;
+    const iconStartPosY = 110;
     const iconSize = 50;
     const iconGap = 10;
     const trayPosX = 130;
@@ -322,7 +322,7 @@
         completeBurgerExample = [];
         const recipeImgExample = ['bunNormal', ...recipeIng, 'bunNormalTop'];
         recipeImgExample.forEach( (ingredient, i) => {
-            const tempImg = context.add.image(98, (254 - (i * 7)), ingredient).setOrigin(0, 0).setScale(.5);
+            const tempImg = context.add.image(98, (260 - (i * 7)), ingredient).setOrigin(0, 0).setScale(.5);
             completeBurgerExample.push(tempImg);
         });
     }
