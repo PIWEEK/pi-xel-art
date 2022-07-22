@@ -8,9 +8,22 @@
         @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
         html {
             background-color: black;
+            height: 100%;
         }
         body {
             margin: 0;
+            background-position: center center;
+            background-image: url('assets/others/outside.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            height: 100%;
+        }
+        #container {
+            display: flex;
+            justify-content: center;
+            align-item: center;
+            width: 100%;
+            height: 100%;
         }
         canvas {
             display: flex;
@@ -20,13 +33,13 @@
     </style>
 </head>
 <body>
-
 <script type="text/javascript">
 
     var config = {
         type: Phaser.AUTO,
         width: 800,
         height: 600,
+        parent: 'container',
         backgroundColor: '#2d2d2d',
         physics: {
             default: 'arcade',
@@ -356,6 +369,6 @@
     }
 
 </script>
-
+<div id="container"></div>
 </body>
 </html>
