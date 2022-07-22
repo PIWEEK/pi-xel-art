@@ -178,11 +178,13 @@
             });
             clearMenuExtras();
             pausedKeys = true;
-            setTimeout(() => {
-                resetValues(context);
-            }, 1000);
             tips -= 8
             tipsText.setText('$' + tips);
+            tipsText.setColor('#f54242');
+            setTimeout(() => {
+                resetValues(context);
+            }, 1500);
+            console.log('Text color');
         }, 1000);
         } else if (numIngredients === recipeIng.length && recipeIng[index] === ingredient) {
             // order complete
@@ -199,11 +201,12 @@
                 });
                 clearMenuExtras();
                 pausedKeys = true;
+                tips += 8
+                tipsText.setColor('#5ac947');
+                tipsText.setText('$' + tips);
                 setTimeout(() => {
                     resetValues(context);
                 }, 1000);
-                tips += 8
-                tipsText.setText('$' + tips);
             }, 3000);
         } else if (recipeIng[index] === ingredient) {
             // mark check introduced ingredient
@@ -244,6 +247,7 @@
         ingredientPosition = 419;
         isFirstIngredient = true;
         pausedKeys = false;
+        tipsText.setColor('#fff');
     }
 
     function getRandomMenuExtras(context) {
