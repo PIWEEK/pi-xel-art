@@ -103,7 +103,7 @@
        // Cursors
         cursors = this.input.keyboard.createCursorKeys();
 
-        tipsText = this.add.text(655, 285, tips + ' €', { fontFamily: 'VT323', fontSize: '24px', fill: '#fff', align: 'left'}).setOrigin(0, 0);
+        tipsText = this.add.text(685, 285, '$' + tips, { fontFamily: 'VT323', fontSize: '24px', fill: '#fff', align: 'left'}).setOrigin(0, 0);
     }
 
     function update () {
@@ -150,8 +150,8 @@
             setTimeout(() => {
                 resetValues(context);
             }, 1000);
-            tips -= 100
-            tipsText.setText(tips + ' €');
+            tips -= 8
+            tipsText.setText('$' + tips);
         }, 1000);
         } else if (numIngredients === recipeIng.length && recipeIng[index] === ingredient) {
             // order complete
@@ -171,8 +171,8 @@
                 setTimeout(() => {
                     resetValues(context);
                 }, 1000);
-                tips += 100
-                tipsText.setText(tips + ' €');
+                tips += 8
+                tipsText.setText('$' + tips);
             }, 3000);
         } else if (recipeIng[index] === ingredient) {
             // mark check introduced ingredient
