@@ -44,6 +44,8 @@
 
     let recipeIng;
     let recipeImgList = [];
+    let keyBoardImgList = [];
+    let ingredientPerKey = {};
     let menuExtrasImgList = [];
     let completeBurgerExample = [];
     let cursors;
@@ -66,6 +68,26 @@
     const trayPosY = 380;
     const trayHambX = 215;
 
+    //ingredients
+    let currentIngredient = 0;
+    const patties = ['meat', 'chicken', 'veggie', 'bacon'];
+    const extra1 = ['cheese', 'lettuce', 'pickle', 'tomato'];
+    const sauces = ['bbq', 'ketchup', 'mayo', 'mustard'];
+    const mapIngredients = {
+        'meat': patties,
+        'chicken': patties,
+        'veggie': patties,
+        'bacon': patties,
+        'cheese': extra1,
+        'lettuce': extra1,
+        'pickle': extra1,
+        'tomato': extra1,
+        'bbq': sauces,
+        'ketchup': sauces,
+        'mayo': sauces,
+        'mustard': sauces,
+    };
+
     let game = new Phaser.Game(config);
 
     function preload ()
@@ -80,8 +102,24 @@
         this.load.image('cheeseIcon', 'assets/icons/cheese.png');
         this.load.image('lettuce', 'assets/ingredients/lettuce.png');
         this.load.image('lettuceIcon', 'assets/icons/lettuce.png');
+        this.load.image('bacon', 'assets/ingredients/bacon.png');
+        this.load.image('baconIcon', 'assets/icons/bacon.png');
+        this.load.image('pickle', 'assets/ingredients/pickle.png');
+        this.load.image('pickleIcon', 'assets/icons/pickle.png');
+        this.load.image('bbq', 'assets/ingredients/BBQSauce.png');
+        this.load.image('bbqIcon', 'assets/icons/bbq.png');
+        this.load.image('mustard', 'assets/ingredients/mustardSauce.png');
+        this.load.image('mustardIcon', 'assets/icons/mustard.png');
+        this.load.image('mayo', 'assets/ingredients/mayoSauce.png');
+        this.load.image('mayoIcon', 'assets/icons/mayo.png');
+        this.load.image('ketchup', 'assets/ingredients/ketchupSauce.png');
+        this.load.image('ketchupIcon', 'assets/icons/ketchup.png');
         this.load.image('meat', 'assets/ingredients/BeefPatty.png');
         this.load.image('meatIcon', 'assets/icons/meat.png');
+        this.load.image('chicken', 'assets/ingredients/ChickenPatty.png');
+        this.load.image('chickenIcon', 'assets/icons/chicken.png');
+        this.load.image('veggie', 'assets/ingredients/VeggyPatty.png');
+        this.load.image('veggieIcon', 'assets/icons/vegetal.png');
         this.load.image('sodaCoke', 'assets/others/sodaCoke.png');
         this.load.image('sodaPink', 'assets/others/sodaPink.png');
         this.load.image('sodaFanta', 'assets/others/sodaFanta.png');
@@ -94,9 +132,10 @@
 
     function create () {
         //  A simple background for our game
-        createBackgroundScenario(this);
+        this.add.image(400, 300, 'bg');
 
         setRecipe(this);
+        setKeyboardIcons(this);
         setMenuExtras(this);
         setCustomer(this);
 
@@ -112,26 +151,18 @@
             isFirstIngredient = false;
         }
         if (cursors.down.isDown && checkKeyPressedCoolTime() && !pausedKeys) {
-            stackIngredient(this, this.add.image(trayHambX, 0, 'tomato'), true);
-            checkResult(this, 'tomato');
+            stackIngredient(this, this.add.image(trayHambX, 0, ingredientPerKey['down']), true);
+            checkResult(this, ingredientPerKey['down']);
         } else if (cursors.right.isDown && checkKeyPressedCoolTime() && !pausedKeys) {
-            stackIngredient(this, this.add.image(trayHambX, 0, 'cheese'), true);
-            checkResult(this, 'cheese');
+            stackIngredient(this, this.add.image(trayHambX, 0, ingredientPerKey['right']), true);
+            checkResult(this, ingredientPerKey['right']);
         } else if (cursors.left.isDown && checkKeyPressedCoolTime() && !pausedKeys) {
-            stackIngredient(this, this.add.image(trayHambX, 0, 'lettuce'), true);
-            checkResult(this, 'lettuce');
+            stackIngredient(this, this.add.image(trayHambX, 0, ingredientPerKey['left']), true);
+            checkResult(this, ingredientPerKey['left']);
         } else if (cursors.up.isDown && checkKeyPressedCoolTime() && !pausedKeys) {
-            stackIngredient(this, this.add.image(trayHambX, 0, 'meat'), true);
-            checkResult(this, 'meat',);
+            stackIngredient(this, this.add.image(trayHambX, 0, ingredientPerKey['up']), true);
+            checkResult(this, ingredientPerKey['up'],);
         }
-    }
-
-    function createBackgroundScenario(context) {
-        context.add.image(400, 300, 'bg');
-        context.add.image(445, 195, 'meatIcon').setOrigin(0, 0);
-        context.add.image(445, 325, 'tomatoIcon').setOrigin(0, 0);
-        context.add.image(380, 260, 'lettuceIcon').setOrigin(0, 0);
-        context.add.image(510, 260, 'cheeseIcon').setOrigin(0, 0);
     }
 
     function checkResult(context, ingredient) {
@@ -178,6 +209,8 @@
             // mark check introduced ingredient
             console.log('mark check introduced ingredient', ingredient);
             recipeImgList[index].alpha = 0.2;
+            currentIngredient++;
+            setKeyboardIcons(context);
         }
     }
 
@@ -202,10 +235,12 @@
     }
 
     function resetValues(context) {
+        numIngredients = 0;
+        currentIngredient = 0;
         setRecipe(context);
+        setKeyboardIcons(context);
         setMenuExtras(context);
         setCustomer(context);
-        numIngredients = 0;
         ingredientPosition = 419;
         isFirstIngredient = true;
         pausedKeys = false;
@@ -242,11 +277,11 @@
     }
 
     function setRecipe(context) {
-        recipeImgList.forEach(img => img.destroy());
-        recipeImgList = [];
         recipeIng = recipeIngredients();
 
-        // icon menu
+        // menu icons
+        recipeImgList.forEach(img => img.destroy());
+        recipeImgList = [];
         recipeIng.forEach( (ingredient, i) => {
             const tempImg = context.add.image(iconStartPosX + ((iconSize + iconGap) *i), iconStartPosY, ingredient+'Icon').setOrigin(0, 0);
             recipeImgList.push(tempImg);
@@ -262,6 +297,38 @@
         });
     }
 
+    function setKeyboardIcons(context) {
+        // keyboard icons
+        const keyPosition = {
+            0: { x: 445, y: 195 },
+            1: { x: 445, y: 325 },
+            2: { x: 380, y: 260 },
+            3: { x: 510, y: 260 }
+        };
+        const mapKeyIndex = {
+            0: 'up',
+            1: 'down',
+            2: 'left',
+            3: 'right'
+        };
+        keyBoardImgList.length && keyBoardImgList.forEach(img => img.destroy());
+        keyBoardImgList = [];
+        ingredientPerKey = {};
+
+        // recipeIng
+        console.log('recipeIng', recipeIng);
+        console.log('currentIngredient', currentIngredient);
+        console.log(recipeIng[currentIngredient]);
+        const keyOptions = mapIngredients[recipeIng[currentIngredient]];
+        console.log('keyoptions', keyOptions);
+        keyOptions.forEach( (ingredient, i) => {
+            const keyboardTempImg = context.add.image(keyPosition[i].x, keyPosition[i].y, ingredient+'Icon').setOrigin(0, 0);
+            keyBoardImgList.push(keyboardTempImg);
+            ingredientPerKey[mapKeyIndex[i]] = ingredient;
+        });
+        console.log('ingredientPerKey', ingredientPerKey);
+    }
+
     function setCustomer(context) {
         customer && customer.destroy();
         const customerOptions = ['customerA', 'customerB'];
@@ -269,8 +336,8 @@
     }
 
     function recipeIngredients() {
-        const howManyIngredients = Math.floor(Math.random() * (5 - 2) + 2);
-        const ingredients = ['meat', 'lettuce', 'cheese', 'tomato'];
+        const howManyIngredients = Math.floor(Math.random() * (7 - 4) + 4);
+        const ingredients = [...patties, ...extra1, ...sauces];
         const recipe = [];
         Array.from({length: howManyIngredients}, (v, i) => i).forEach(it => {
             recipe.push(ingredients[Math.floor(Math.random()*ingredients.length)]);
