@@ -315,12 +315,7 @@
         keyBoardImgList = [];
         ingredientPerKey = {};
 
-        // recipeIng
-        console.log('recipeIng', recipeIng);
-        console.log('currentIngredient', currentIngredient);
-        console.log(recipeIng[currentIngredient]);
         const keyOptions = mapIngredients[recipeIng[currentIngredient]];
-        console.log('keyoptions', keyOptions);
         keyOptions.forEach( (ingredient, i) => {
             const keyboardTempImg = context.add.image(keyPosition[i].x, keyPosition[i].y, ingredient+'Icon').setOrigin(0, 0);
             keyBoardImgList.push(keyboardTempImg);
