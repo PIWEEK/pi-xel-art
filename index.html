@@ -244,14 +244,15 @@
     }
 
     function stackIngredient(context, img, addNewIngredient) {
+        const spaceBetweenIngredients = patties.includes(img) ? 15 : 10;
         addNewIngredient && newIngredient();
         let yValue;
         if (numIngredients === 0) {
             yValue = ingredientPosition;
         } else if (!addNewIngredient && numIngredients === recipeIng.length) {
-            yValue = ingredientPosition - (15 * (numIngredients + 1));
+            yValue = ingredientPosition - (spaceBetweenIngredients * (numIngredients + 1));
         } else {
-            yValue = ingredientPosition - (15 * numIngredients);
+            yValue = ingredientPosition - (spaceBetweenIngredients * numIngredients);
         }
         const tempTween = context.tweens.add({
             targets: img,
@@ -322,6 +323,7 @@
         completeBurgerExample = [];
         const recipeImgExample = ['bunNormal', ...recipeIng, 'bunNormalTop'];
         recipeImgExample.forEach( (ingredient, i) => {
+            const spaceBetweenIngredients = patties.includes(ingredient) ? 7 : 4;
             const tempImg = context.add.image(98, (260 - (i * 7)), ingredient).setOrigin(0, 0).setScale(.5);
             completeBurgerExample.push(tempImg);
         });
